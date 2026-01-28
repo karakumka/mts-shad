@@ -36,26 +36,27 @@
 
 1) Клонируйте репозиторий с проектом на локальный компьютер.
 
-git clone <URL_репозитория>
-cd <имя_папки_проекта>
+`git clone <URL_репозитория>`
+
+`cd <имя_папки_проекта>`
 
 2) Из корня проекта запустите терминал и создайте виртуальное окружение.
 
-python -m venv <имя_окружения>- общая строка для запуска виртуального окружения
+`python -m venv <имя_окружения>` - общая строка для запуска виртуального окружения
 
-<имя_окружения>\Scripts\Activate.ps1 - активация окружения для Windows (PowerShell)
+`<имя_окружения>\Scripts\Activate.ps1` - активация окружения для Windows (PowerShell)
 
-<имя_окружения>\Scripts\activate.bat - активация окружения для Windows (cmd)
+`<имя_окружения>\Scripts\activate.bat` - активация окружения для Windows (cmd)
 
-source <имя_окружения>/bin/activate - активация окружения для Linux/macOS
+`source <имя_окружения>/bin/activate` - активация окружения для Linux/macOS
 
 3) Установите необходимые библиотеки.
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 4) Для получения файла в формате `.csv` выполните следующую команду:
 
-scrapy crawl movies -o wiki_movies.csv
+`scrapy crawl movies -o wiki_movies.csv`
 
 
 
