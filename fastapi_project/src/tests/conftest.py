@@ -11,6 +11,7 @@ import pytest
 import pytest_asyncio
 from icecream import ic
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.pool import NullPool
 
 from src.configurations.settings import settings
 from src.models import books  # noqa
@@ -24,6 +25,7 @@ from src.models.books import Book  # noqa F401
 async_test_engine = create_async_engine(
     settings.database_test_url,
     echo=True,
+    poolclass=NullPool,
 )
 
 # Создаем фабрику сессий для тестового движка.
@@ -79,7 +81,8 @@ def test_app(override_get_async_session):
 
     app.dependency_overrides[get_async_session] = override_get_async_session
 
-    return app
+    yield app
+    app.dependency_overrides.clear()
 
 
 # создаем асинхронного клиента для ручек
@@ -88,3 +91,22 @@ async def async_client(test_app):
     transport = httpx.ASGITransport(app=test_app)
     async with httpx.AsyncClient(transport=transport, base_url="http://127.0.0.1:8000") as test_client:
         yield test_client
+
+
+# создаем фикстуру для авторизации
+@pytest_asyncio.fixture
+async def auth_data(async_client):
+    seller_data = {
+        "first_name": "Lady",
+        "last_name": "Gaga",
+        "email": "l_gaga@hotmail.com",
+        "password": "8pokerface",
+    }
+
+    seller_response = await async_client.post("/api/v1/sellers/", json=seller_data)
+    seller = seller_response.json()
+
+    token_response = await async_client.post("/api/v1/token/", json={"email": "l_gaga@hotmail.com", "password": "8pokerface"})
+    token = token_response.json()["access_token"]
+
+    return {"seller": seller, "headers": {"Authorization": f"Bearer {token}"}}

@@ -6,10 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.configurations.database import get_async_session
 from src.schemas import IncomingBook, PatchBook, ReturnedAllBooks, ReturnedBook
 from src.services import BookService
+from src.dependencies.auth import get_current_user
 
 books_router = APIRouter(prefix="/books", tags=["books"])
 
 DBSession = Annotated[AsyncSession, Depends(get_async_session)]
+CurrentUser = Annotated[dict, Depends(get_current_user)]
 
 
 @books_router.get("/", response_model=ReturnedAllBooks)
@@ -19,7 +21,7 @@ async def get_all_books(session: DBSession):
 
 
 @books_router.post("/", response_model=ReturnedBook, status_code=status.HTTP_201_CREATED)
-async def create_book(book: IncomingBook, session: DBSession):
+async def create_book(book: IncomingBook, session: DBSession, user: CurrentUser):
     new_book = await BookService(session).add_book(book)
 
     return new_book
@@ -45,7 +47,7 @@ async def delete_book(book_id: int, session: DBSession):
 
 
 @books_router.put("/{book_id}", response_model=ReturnedBook)
-async def update_book(book_id: int, new_book_data: ReturnedBook, session: DBSession):
+async def update_book(book_id: int, new_book_data: ReturnedBook, session: DBSession, user: CurrentUser):
 
     updated_book = await BookService(session).update_book(book_id, new_book_data)
 
