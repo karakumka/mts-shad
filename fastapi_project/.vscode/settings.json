@@ -4,7 +4,9 @@
   "python.testing.cwd": "${workspaceFolder}/src",
   "python.testing.pytestEnabled": true,
   "python.analysis.extraPaths": ["${workspaceFolder}/src"],
-  "python.defaultInterpreterPath": "/home/maxim/Projects/shad/2025/fastapi_project/.venv/bin/python"
+  "python.defaultInterpreterPath": "/home/maxim/Projects/shad/2025/fastapi_project/.venv/bin/python",
+  "python-envs.defaultEnvManager": "ms-python.python:venv",
+  "python-envs.defaultPackageManager": "ms-python.python:pip"
   // "pythonTestExplorer.testFramework": "pytest",
   // "python.testing.autoTestDiscoverOnSaveEnabled": true,
   // "debug.allowBreakpointsEverywhere": true,
